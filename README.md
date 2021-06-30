@@ -16,12 +16,11 @@ DATABASE SCHEMA
 
 SCREENSHORTS: 
 
-![image](https://user-images.githubusercontent.com/52366077/123999596-510b3700-d9f0-11eb-9eae-8442a22d8b01.png)
+![image](https://user-images.githubusercontent.com/52366077/124024160-7312b280-da0c-11eb-9310-bbd168026dca.png)
 
-![image](https://user-images.githubusercontent.com/52366077/123999785-80ba3f00-d9f0-11eb-9622-01acb336579e.png)
+![image](https://user-images.githubusercontent.com/52366077/124024305-a6edd800-da0c-11eb-8ea5-bbfeb29a3d51.png)
 
-![image](https://user-images.githubusercontent.com/52366077/123999686-68e2bb00-d9f0-11eb-94b0-95ce75f91eda.png)
-
+![image](https://user-images.githubusercontent.com/52366077/124024227-8b82cd00-da0c-11eb-9f09-bbe616005527.png)
 
 ![image](https://user-images.githubusercontent.com/52366077/123976904-29aa6f00-d9dc-11eb-85f8-5ab0743157a7.png)
 

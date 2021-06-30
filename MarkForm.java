@@ -13,7 +13,7 @@ import net.proteanit.sql.DbUtils;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 
-public class StudentForm {
+public class MarkForm {
 
 	private JFrame frame;
 	private JTable table;
@@ -27,28 +27,21 @@ public class StudentForm {
 	Statement stmt;
 	ResultSet rs;
 
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					StudentForm window = new StudentForm();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
+	/*
+	 * public static void main(String[] args) { EventQueue.invokeLater(new
+	 * Runnable() { public void run() { try { StudentForm window = new
+	 * StudentForm(); window.frame.setVisible(true); } catch (Exception e) {
+	 * e.printStackTrace(); } } }); }
+	 */
 
-	public StudentForm() throws Exception {
+	public MarkForm() throws Exception {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 773, 509);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setVisible(true);
 		frame.setTitle("Student Mark");
-		
-		
+
 		initialize();
 		DbConnect.connect();
 		displayOd();
@@ -84,10 +77,11 @@ public class StudentForm {
 	}
 
 	private void initialize() {
-		/*frame = new JFrame();
-		frame.setBounds(100, 100, 773, 509);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);*/
+		/*
+		 * frame = new JFrame(); frame.setBounds(100, 100, 773, 509);
+		 * frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		 * frame.getContentPane().setLayout(null);
+		 */
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 32, 739, 97);

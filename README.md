@@ -4,7 +4,7 @@ This is an java based application which uses 2 tire architecture (client GUI and
 
 Module : 
 
-1. Admin: the admin can access all the tables in database schema. Admin can create new student which in turn triggers necessory event on the database.
+1. Admin: the admin can access all the tables in database schema. Admin can create new student,staff which in turn auto triggers necessory function and procedure on the database
 2. Staff: Each staff is assigned with an subject. the staff can view the marks of assigned subject. and can alter the marks from the console.
 3. Student (Under development) : Each student can view their internalMarks of each subject. 
 4. Student and staff communication using socket networking ( under development ).

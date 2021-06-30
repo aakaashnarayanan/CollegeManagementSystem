@@ -2,6 +2,7 @@ package design;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.swing.JFrame;
@@ -17,7 +18,11 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
+
+import org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class AdminForm {
 
@@ -34,13 +39,21 @@ public class AdminForm {
 	String fetchStudentCmd;
 	String deleteStudentCmd;
 	String deleteMarkCmd;
+	String insertStaffCmd;
+	String assignSubjectCmd;
 
 	private JTable table;
-	private JComboBox DatabaseComboBox;
+	private JComboBox<String> DatabaseComboBox;
 	private JComboBox<String> Dept_ComboBox;
 	private JScrollPane scrollPane;
 	private JTextField text_StudentId;
 	private JTextField text_StudnetName;
+	private JTextField text_StaffId;
+	private JTextField text_staffName;
+	private JLabel lblNewLabel_3;
+	private JLabel lblNewLabel_4;
+	private JTextField text_DptID;
+	private JButton AllMark_btn;
 
 	/*
 	 * public static void main(String[] args) { EventQueue.invokeLater(new
@@ -55,6 +68,7 @@ public class AdminForm {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setVisible(true);
+		frame.setTitle("Admin From");
 
 		DbConnect.connect();
 		initialize();
@@ -71,17 +85,24 @@ public class AdminForm {
 
 	}
 
-	public void createStudent() throws Exception {
-		getDeptId();
+	public void createStudent() {
 		insertStudentCmd = "insert into cms.student values(" + text_StudentId.getText() + "," + "'"
 				+ text_StudnetName.getText() + "'," + dpt_id + ")";
 		System.out.println(insertStudentCmd);
-		// stmt = DbConnect.conn.createStatement();
-		// stmt.executeUpdate(displayDatabaseCmd);
-		PreparedStatement pstmt = DbConnect.conn.prepareStatement(insertStudentCmd);
-		pstmt.executeUpdate();
-		System.out.println("student added");
-		System.out.println("Triggering addStudentMarks event....!");
+		PreparedStatement pstmt;
+		try {
+			getDeptId();
+			pstmt = DbConnect.conn.prepareStatement(insertStudentCmd);
+			pstmt.executeUpdate();
+			System.out.println("student added");
+			System.out.println("Triggering addStudentMarks event....!");
+		} catch (DerbySQLIntegrityConstraintViolationException e) {
+			JOptionPane.showMessageDialog(text_StudentId, "Invalid Input");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void getDeptNames() throws Exception {
@@ -112,7 +133,6 @@ public class AdminForm {
 		rs = stmt.executeQuery(fetchStudentCmd);
 		rs.next();
 		text_StudnetName.setText(rs.getString("stu_name"));
-		// Dept_ComboBox.setName(Integer.toString(rs.getInt("dpt_id")));
 	}
 
 	public void deleteStudentDetails() throws Exception {
@@ -125,7 +145,22 @@ public class AdminForm {
 		System.out.println("deleted the student success");
 	}
 
-	@SuppressWarnings("unchecked")
+	public void createStaff() {
+
+		insertStaffCmd = "insert into cms.staff values(" + text_StaffId.getText() + ",'" + text_staffName.getText()
+				+ "'," + text_DptID.getText() + ")";
+		PreparedStatement pstmt;
+		try {
+			pstmt = DbConnect.conn.prepareStatement(insertStaffCmd);
+			pstmt.executeUpdate();
+			System.out.println("staff added...");
+		} catch (DerbySQLIntegrityConstraintViolationException e) {
+			JOptionPane.showMessageDialog(text_DptID, "Invalid input");
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+	}
+
 	private void initialize() {
 		/*
 		 * frame = new JFrame(); frame.setBounds(100, 100, 755, 627);
@@ -140,13 +175,13 @@ public class AdminForm {
 		table = new JTable();
 		scrollPane.setViewportView(table);
 
-		DatabaseComboBox = new JComboBox();
-		DatabaseComboBox.setModel(
-				new DefaultComboBoxModel(new String[] { "Department", "Student", "Mark ", "Staff", "Subject", "" }));
-		DatabaseComboBox.setBounds(437, 234, 126, 21);
+		DatabaseComboBox = new JComboBox<String>();
+		DatabaseComboBox.setModel(new DefaultComboBoxModel<String>(
+				new String[] { "Department", "Student", "Mark ", "Staff", "Subject", "" }));
+		DatabaseComboBox.setBounds(28, 234, 126, 21);
 		frame.getContentPane().add(DatabaseComboBox);
 
-		JButton DisplayBtn = new JButton("Display");
+		JButton DisplayBtn = new JButton("View");
 		DisplayBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -156,7 +191,7 @@ public class AdminForm {
 				}
 			}
 		});
-		DisplayBtn.setBounds(590, 234, 123, 21);
+		DisplayBtn.setBounds(173, 234, 123, 21);
 		frame.getContentPane().add(DisplayBtn);
 
 		JButton Create_student_btn = new JButton("Create Student");
@@ -199,6 +234,32 @@ public class AdminForm {
 		Delete_Student_btn.setBounds(437, 343, 126, 21);
 		frame.getContentPane().add(Delete_Student_btn);
 
+		JButton CreateStaff_btn = new JButton("Create Staff");
+		CreateStaff_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					createStaff();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		CreateStaff_btn.setBounds(590, 423, 123, 21);
+		frame.getContentPane().add(CreateStaff_btn);
+
+		AllMark_btn = new JButton("All Marks");
+		AllMark_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					new StudentForm();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		AllMark_btn.setBounds(319, 234, 123, 21);
+		frame.getContentPane().add(AllMark_btn);
+
 		text_StudentId = new JTextField();
 		text_StudentId.setBounds(50, 299, 96, 19);
 		frame.getContentPane().add(text_StudentId);
@@ -224,6 +285,33 @@ public class AdminForm {
 		Dept_ComboBox = new JComboBox<String>();
 		Dept_ComboBox.setBounds(437, 298, 126, 21);
 		frame.getContentPane().add(Dept_ComboBox);
+
+		text_StaffId = new JTextField();
+		text_StaffId.setBounds(50, 424, 96, 19);
+		frame.getContentPane().add(text_StaffId);
+		text_StaffId.setColumns(10);
+
+		text_staffName = new JTextField();
+		text_staffName.setBounds(240, 424, 96, 19);
+		frame.getContentPane().add(text_staffName);
+		text_staffName.setColumns(10);
+
+		lblNewLabel_3 = new JLabel("Staff ID");
+		lblNewLabel_3.setBounds(10, 427, 45, 13);
+		frame.getContentPane().add(lblNewLabel_3);
+
+		lblNewLabel_4 = new JLabel("Staff Name :");
+		lblNewLabel_4.setBounds(173, 427, 86, 13);
+		frame.getContentPane().add(lblNewLabel_4);
+
+		JLabel lblNewLabel_5 = new JLabel("Dpt ID:");
+		lblNewLabel_5.setBounds(368, 427, 59, 13);
+		frame.getContentPane().add(lblNewLabel_5);
+
+		text_DptID = new JTextField();
+		text_DptID.setBounds(437, 424, 96, 19);
+		frame.getContentPane().add(text_DptID);
+		text_DptID.setColumns(10);
 
 	}
 }

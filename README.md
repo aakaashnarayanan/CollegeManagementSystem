@@ -1,9 +1,11 @@
 # CollegeManagementSystem (under development)
 
 This is an java based application which uses 2 tire architecture (client GUI and Derby Database).
+
 Module : 
+
 1. Admin: the admin can access all the tables in database schema. Admin can create new student which in turn triggers necessory event on the database.
-2. Staff: Each staff is assigned with an subject. the staff can view once the marks of assigned subject. and can alter the marks from the console.
+2. Staff: Each staff is assigned with an subject. the staff can view the marks of assigned subject. and can alter the marks from the console.
 
 DATABASE SCHEMA
 ![DbSchema](https://user-images.githubusercontent.com/52366077/123975324-dd126400-d9da-11eb-916b-8118e9dd7b62.jpg)

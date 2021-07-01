@@ -7,6 +7,7 @@ import javax.swing.JTextField;
 
 import database.DbConnect;
 import net.proteanit.sql.DbUtils;
+import processing.MarkCalulcation;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -16,6 +17,7 @@ import java.sql.Statement;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
+import java.awt.Color;
 
 public class StaffEntryForm {
 
@@ -38,6 +40,7 @@ public class StaffEntryForm {
 	String UpdateStudentCmd;
 	String GetStudentIds;
 	String getSubjectIds;
+	String updateInternalCmd;
 
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_1;
@@ -57,6 +60,7 @@ public class StaffEntryForm {
 
 	public StaffEntryForm(String staffid) throws Exception {
 		frame = new JFrame();
+		frame.getContentPane().setBackground(new Color(245, 222, 179));
 		frame.setBounds(100, 100, 708, 499);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
@@ -71,7 +75,7 @@ public class StaffEntryForm {
 	}
 
 	public void displayStudent(String staff_id) throws Exception {
-		DisplayStudentcmd = "select st.stu_id as ID,st.stu_name as NAME,sub.subject_name as SUBJECT,m.mark1,m.mark2,m.mark3,m.mark4,m.mark5,m.mark6,m.total from cms.mark m join cms.student st on m.stu_id = st.stu_id join cms.subject sub on m.subject_id = sub.subject_id where sub.staff_id = "
+		DisplayStudentcmd = "select st.stu_id as ID,st.stu_name as NAME,sub.subject_name as SUBJECT,m.mark1,m.mark2,m.mark3,m.mark4,m.mark5,m.mark6,m.internal from cms.mark m join cms.student st on m.stu_id = st.stu_id join cms.subject sub on m.subject_id = sub.subject_id where sub.staff_id = "
 				+ staff_id + " order by st.stu_id,st.stu_name";
 		stmt = DbConnect.conn.createStatement();
 		rs = stmt.executeQuery(DisplayStudentcmd);
@@ -102,6 +106,14 @@ public class StaffEntryForm {
 
 	}
 
+	public void updateInternalMark(float internal) throws Exception {
+		updateInternalCmd = "update cms.mark set internal = " + internal + " where stu_id = "
+				+ comboBox1.getSelectedItem().toString() + " and subject_id = " + subject_id;
+		PreparedStatement pstmt = DbConnect.conn.prepareStatement(updateInternalCmd);
+		pstmt.executeUpdate();
+		System.out.println("Internal mark updated in database..");
+	}
+
 	public void updateStudentDetials() throws Exception {
 		UpdateStudentCmd = "update cms.mark set mark1 = " + mark1_text.getText() + ", mark2 =" + mark2_text.getText()
 				+ ", mark3 =" + mark3_text.getText() + ", mark4 =" + mark4_text.getText() + ", mark5 ="
@@ -110,14 +122,13 @@ public class StaffEntryForm {
 		PreparedStatement pstmt = DbConnect.conn.prepareStatement(UpdateStudentCmd);
 		pstmt.executeUpdate();
 		System.out.println("student details altered..");
+		updateInternalMark(MarkCalulcation.InternalCalculation(subject_id, comboBox1.getSelectedItem().toString()));
 	}
 
 	public void fecthStudentDetails() throws Exception {
 		FetchStudentCmd = "select st.stu_id as ID,st.stu_name as NAME,sub.subject_name as SUBJECT,m.mark1,m.mark2,m.mark3,m.mark4,m.mark5,m.mark6 from cms.mark m join cms.student st on m.stu_id = st.stu_id join cms.subject sub on m.subject_id = sub.subject_id where sub.staff_id = "
 				+ staff_id + " and st.stu_id = " + comboBox1.getSelectedItem().toString()
 				+ " order by st.stu_id,st.stu_name";
-		// FetchStudentCmd = "select mark1,mark2,mark3,mark4,mark5,mark6 from cms.mark
-		// where subject_id = 301 and stu_id = "+stu_id_text.getText();
 		System.out.println(FetchStudentCmd);
 		stmt = DbConnect.conn.createStatement();
 		rs = stmt.executeQuery(FetchStudentCmd);
@@ -136,7 +147,6 @@ public class StaffEntryForm {
 		 * frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		 * frame.getContentPane().setLayout(null);
 		 */
-
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(23, 25, 648, 162);
 		frame.getContentPane().add(scrollPane);

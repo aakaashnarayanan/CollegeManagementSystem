@@ -1,4 +1,4 @@
-## CollegeManagementSystem (under development)
+## CollegeManagementSystem
 
 This is an java based application which uses 2 tire architecture (client GUI and Derby Database).
 
